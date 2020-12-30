@@ -26,7 +26,7 @@ function renderComplexForm(props?: Partial<ComplexFormProps>) {
     result.getByLabelText("Are you at least 21 years old?");
 
   const FavoriteDrinkInput = () => result.queryByLabelText("What's your favorite drink?");
-  
+
   const CancelButton = () => result.getByText("Cancel");
 
   const SubmitButton = () => result.getByText("Apply");
@@ -114,7 +114,7 @@ describe("<ComplexForm />", () => {
     expect(FavoriteDrinkInput()).toBeInTheDocument();
 
   });
-  
+
   it("should call onCancel when cancel button is clicked", async () => {
     const {
       clickCancel,

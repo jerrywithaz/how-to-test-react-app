@@ -4,7 +4,7 @@ import ComplexForm from './components/ComplexForm';
 
 function App() {
   return (
-    <ComplexForm onSubmit={() => {}} />
+    <ComplexForm onSubmit={() => { }} onCancel={() => {}}/>
   );
 }
 

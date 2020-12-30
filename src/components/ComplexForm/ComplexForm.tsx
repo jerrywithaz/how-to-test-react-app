@@ -2,17 +2,18 @@ import React, { useState, VoidFunctionComponent } from "react";
 
 type FormJSON = Record<string, any>;
 
-type ComplexFormProps = {
+export type ComplexFormProps = {
   onSubmit: (data: FormJSON) => void;
+  onCancel: VoidFunction;
 }
 
-const ComplexForm: VoidFunctionComponent<ComplexFormProps> = ({ onSubmit }) => {
+const ComplexForm: VoidFunctionComponent<ComplexFormProps> = ({ onSubmit, onCancel }) => {
   const [isOver21, setIsOver21] = useState<boolean>(false);
 
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const form = document.getElementById("myForm") as HTMLFormElement;
+    const form = event.target as HTMLFormElement;
     const data = formToJSON(form.elements);
 
     onSubmit(data);
@@ -33,7 +34,7 @@ const ComplexForm: VoidFunctionComponent<ComplexFormProps> = ({ onSubmit }) => {
         <input type="text" id="first_name" name="first_name" />
       </div>
       <div>
-        <label htmlFor="first_name">Last Name</label>
+        <label htmlFor="last_name">Last Name</label>
         <input type="text" id="last_name" name="last_name" />
       </div>
       <div>
@@ -52,6 +53,7 @@ const ComplexForm: VoidFunctionComponent<ComplexFormProps> = ({ onSubmit }) => {
           <input type="text" id="favorite_drink" name="favorite_drink" />
         </div>
       )}
+      <button type="button" onClick={onCancel}>Cancel</button>
       <button type="submit">Apply</button>
     </form>
   );
@@ -64,10 +66,14 @@ const formToJSON = (
   elements: HTMLFormControlsCollection
 ): FormJSON => {
   return Array.from(elements).reduce((data, element: any) => {
-    return {
-      ...data,
-      [element.name]: element.value
-    };
+    if (element.name) {
+      const value = element.type === 'checkbox' ? element.checked : element.value;
+      return {
+        ...data,
+        [element.name]: value
+      };
+    }
+    return { ...data };
   }, {} as FormJSON);
 };
 
